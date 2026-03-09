@@ -1,0 +1,56 @@
+@model Employee
+
+@{
+    ViewData["Title"] = "Employee Form";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1">Employee Entry Form</h1>
+        <p class="text-secondary mb-0">Enter employee details and save them into the SQL database.</p>
+    </div>
+    <a class="btn btn-outline-primary" asp-action="Download">Go To PDF Download</a>
+</div>
+
+@if (TempData["SuccessMessage"] is string message)
+{
+    <div class="alert alert-success">@message</div>
+}
+
+<form asp-action="Index" method="post" class="row g-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="DateOfBirth" class="form-label"></label>
+        <input asp-for="DateOfBirth" class="form-control" type="date" />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Address" class="form-label"></label>
+        <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="PendingPayment" class="form-label"></label>
+        <input asp-for="PendingPayment" class="form-control" type="number" min="0" step="0.01" />
+        <span asp-validation-for="PendingPayment" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="PaymentReceived" class="form-label"></label>
+        <input asp-for="PaymentReceived" class="form-control" type="number" min="0" step="0.01" />
+        <span asp-validation-for="PaymentReceived" class="text-danger"></span>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary px-4">Save Employee</button>
+    </div>
+</form>
