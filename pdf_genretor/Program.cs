@@ -1,38 +1,40 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using PdfGeneratorApp.Data;
+using PdfGeneratorApp.Forms;
 using PdfGeneratorApp.Repositories;
 using PdfGeneratorApp.Services;
 using QuestPDF.Infrastructure;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace PdfGeneratorApp;
 
-QuestPDF.Settings.License = LicenseType.Community;
-
-builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-builder.Services.AddScoped<IPdfService, PdfService>();
-
-var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
+internal static class Program
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.EnsureCreated();
+    [STAThread]
+    private static void Main()
+    {
+        ApplicationConfiguration.Initialize();
+
+        QuestPDF.Settings.License = LicenseType.Community;
+
+        var builder = Host.CreateApplicationBuilder();
+        var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"]
+            ?? "Data Source=pdf-generator.db";
+
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlite(connectionString));
+        builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        builder.Services.AddScoped<IPdfService, PdfService>();
+        builder.Services.AddScoped<MainForm>();
+
+        using var host = builder.Build();
+        using var scope = host.Services.CreateScope();
+
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        dbContext.Database.EnsureCreated();
+
+        var mainForm = scope.ServiceProvider.GetRequiredService<MainForm>();
+        Application.Run(mainForm);
+    }
 }
-
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Employee}/{action=Index}/{id?}");
-
-app.Run();
