@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("pdf_genretor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+25e95f2607b236320fa35a18d771c2763a4a8f25")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1fc32e2180cc6bb2f1aae87c98eb462d53e34b0")]
 [assembly: System.Reflection.AssemblyProductAttribute("pdf_genretor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("pdf_genretor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
